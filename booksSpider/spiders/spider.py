@@ -23,10 +23,17 @@ class BooksSpider(scrapy.Spider):
         Parse category page and extract books's datas. Datas are stored in scrapy items.
         """
         for book in response.xpath("//article[@class='product_pod']"):
+            rankDict = {
+                "One": 1,
+                "Two": 2,
+                "Three": 3,
+                "Four": 4,
+                "Five": 5
+            }
             item = BookItem()
             item["title"] = book.xpath("h3/a/@title").get()
             item["price"] = book.xpath("div[@class='product_price']/p[@class='price_color']/text()").get()
-            item["rank"] = book.xpath("p/@class").get().split(" ")[1]
+            item["rank"] = rankDict[book.xpath("p/@class").get().split(" ")[1]]
             item["availability"] = bool(book.xpath("div[@class='product_price']/p[@class='instock availability']/i[@class='icon-ok']"))
             item["category"] = response.xpath("//div[@class='page-header action']/h1/text()").get()
             item["url"] = urljoin(response.url, book.xpath("h3/a/@href").get())
