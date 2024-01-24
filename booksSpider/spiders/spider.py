@@ -20,7 +20,9 @@ class BooksSpider(scrapy.Spider):
 
     def parse_category(self, response):
         """
-        Parse category page and extract books's datas. Datas are stored in scrapy items.
+        Parse category page and extract books's.
+        Datas are stored in scrapy items.
+        If there is a next page, it will go to and scrape it until no more.
         """
         for book in response.xpath("//article[@class='product_pod']"):
             rankDict = {
